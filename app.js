@@ -63,8 +63,19 @@ app.post('/login',(req,res)=>{
 
 // ----------------- Delete Expense ------------------
 
-    // Write your code here
-
+ app.delete('/expenses/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = "DELETE FROM expenses WHERE id = ?";
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            return res.status(500).send("Database error!");
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).send("Expense not found!");
+        }
+        res.json({ message: "Expense deleted successfully!" });
+    });
+});
 // ---------------------------------------------------
 
 app.listen(3000,()=>{
