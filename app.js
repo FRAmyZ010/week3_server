@@ -47,25 +47,34 @@ app.post('/login',(req,res)=>{
 
 // ----------------- Show All Expense ------------------
 
-    // Write your code here
 
 // ----------------- Show Today's Expense ------------------
 
-    // Write your code here
 
 // ----------------- Search Expense ------------------
 
-    // Write your code here
 
 // ----------------- Add Expense ------------------
+app.post('/expenses', (req, res) => {
+    const { description, amount, date } = req.body;
+    if (!description || !amount || !date) {
+        return res.status(400).send("Missing fields!");
+    }
 
-    // Write your code here
+    const sql = "INSERT INTO expenses (description, amount, date) VALUES (?, ?, ?)";
+    db.query(sql, [description, amount, date], (err, result) => {
+        if (err) {
+            return res.status(500).send("Database error!");
+        }
+        res.status(201).json({
+            message: "Expense added successfully!",
+            expense_id: result.insertId
+        });
+    });
+});
 
 // ----------------- Delete Expense ------------------
 
-    // Write your code here
-
-// ---------------------------------------------------
 
 app.listen(3000,()=>{
     console.log('Server is running on port 3000 ✅');
