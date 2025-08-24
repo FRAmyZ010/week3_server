@@ -55,14 +55,15 @@ app.post('/login',(req,res)=>{
 
 
 // ----------------- Add Expense ------------------
-app.post('/expenses', (req, res) => {
-    const { description, amount, date } = req.body;
-    if (!description || !amount || !date) {
+
+app.post('/add-expenses', (req, res) => {
+    const { item, paid } = req.body;
+    if (!item || !paid) {
         return res.status(400).send("Missing fields!");
     }
 
-    const sql = "INSERT INTO expenses (description, amount, date) VALUES (?, ?, ?)";
-    db.query(sql, [description, amount, date], (err, result) => {
+    const sql = "INSERT INTO expenses (item, paid) VALUES (?, ?)";
+    db.query(sql, [item, paid], (err, result) => {
         if (err) {
             return res.status(500).send("Database error!");
         }
