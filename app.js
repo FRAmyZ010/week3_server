@@ -76,23 +76,6 @@ app.get('/expenses/today/:user_id', (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ----------------- Add Expense ------------------
 app.post('/add-expenses', (req, res) => {
     const { item, paid, user_id } = req.body;
@@ -114,6 +97,22 @@ app.post('/add-expenses', (req, res) => {
 
 
 // ----------------- Delete Expense ------------------
+
+app.delete('/del-expenses/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = "DELETE FROM expense WHERE id = ?";
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            return res.status(500).send("Database error!");
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).send("Expense not found!");
+        }
+        res.json({ message: "Expense deleted successfully!" });
+    });
+});
+
+// ---------------------------------------------------
 
 
 app.listen(3000,()=>{
