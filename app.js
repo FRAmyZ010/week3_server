@@ -55,7 +55,28 @@ app.post('/login',(req,res)=>{
 
 // ----------------- Search Expense ------------------
 
-    // Write your code here
+app.get('/expense/search/:user_id', (req,res) => {
+    const useId = req.params.user_id;
+    const keyword = req.query.q || '';
+
+    const sql = `
+    SELECT * FROM expense
+    WHERE user_id =?
+    AND name LIKE ?
+    `;
+
+    const values = [userID,`%{keyword}%`];
+
+    db.query(sql, values, (err,result) =>{
+        if(err) {
+            console.error('Database error:',err);
+            return res.status(500).send('Database error');
+        }
+        res.json(result);
+    });
+
+});
+ 
 
 // ----------------- Add Expense ------------------
 
