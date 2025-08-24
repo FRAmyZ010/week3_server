@@ -56,8 +56,8 @@ app.post('/login',(req,res)=>{
 // ----------------- Search Expense ------------------
 
 app.get('/expense/search/:user_id', (req,res) => {
-    const useId = req.params.user_id;
-    const keyword = req.query.q || '';
+    const userId = req.params.user_id;
+    const keyword = (req.body.keyword ||"").trim();
 
     const sql = `
     SELECT * FROM expense
@@ -65,9 +65,9 @@ app.get('/expense/search/:user_id', (req,res) => {
     AND name LIKE ?
     `;
 
-    const values = [userID,`%{keyword}%`];
+   
 
-    db.query(sql, values, (err,result) =>{
+    db.query(sql, [userId,keyword], (err,result) =>{
         if(err) {
             console.error('Database error:',err);
             return res.status(500).send('Database error');
