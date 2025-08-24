@@ -54,16 +54,17 @@ app.post('/login',(req,res)=>{
 // ----------------- Search Expense ------------------
 
 
-// ----------------- Add Expense ------------------
 
+
+// ----------------- Add Expense ------------------
 app.post('/add-expenses', (req, res) => {
-    const { item, paid } = req.body;
-    if (!item || !paid) {
+    const { item, paid, user_id } = req.body;
+    if (!item || !paid || !user_id) {
         return res.status(400).send("Missing fields!");
     }
 
-    const sql = "INSERT INTO expenses (item, paid) VALUES (?, ?)";
-    db.query(sql, [item, paid], (err, result) => {
+    const sql = "INSERT INTO expense (item, paid, user_id) VALUES (?, ?, ?)";
+    db.query(sql, [item, paid, user_id], (err, result) => {
         if (err) {
             return res.status(500).send("Database error!");
         }
@@ -73,6 +74,7 @@ app.post('/add-expenses', (req, res) => {
         });
     });
 });
+
 
 // ----------------- Delete Expense ------------------
 
