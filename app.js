@@ -59,6 +59,8 @@ app.get('/expense/search/:user_id', (req,res) => {
     const userId = req.params.user_id;
     const keyword = (req.body.keyword ||"").trim();
 
+    const searchKeyword = `%${keyword}%` ;
+
     const sql = `
     SELECT * FROM expense
     WHERE user_id =?
@@ -67,7 +69,7 @@ app.get('/expense/search/:user_id', (req,res) => {
 
    
 
-    db.query(sql, [userId,keyword], (err,result) =>{
+    db.query(sql, [userId,searchKeyword ], (err,result) =>{
         if(err) {
             console.error('Database error:',err);
             return res.status(500).send('Database error');
