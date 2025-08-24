@@ -22,7 +22,7 @@ app.get('/password/:raw',(req,res)=>{
 app.post('/login',(req,res)=>{
     const {username, password} = req.body;
     const sql = "SELECT * FROM users WHERE username = ?";
-    con.query(sql,[username],(err,result)=>{
+    db.query(sql,[username],(err,result)=>{
         if(err){
             return res.status(500).send('Database error!');
         }
