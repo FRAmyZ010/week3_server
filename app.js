@@ -22,7 +22,7 @@ app.get('/password/:raw',(req,res)=>{
 app.post('/login',(req,res)=>{
     const {username, password} = req.body;
     const sql = "SELECT * FROM users WHERE username = ?";
-    con.query(sql,[username],(err,result)=>{
+    db.query(sql,[username],(err,result)=>{
         if(err){
             return res.status(500).send('Database error!');
         }
@@ -46,14 +46,32 @@ app.post('/login',(req,res)=>{
 });
 
 // ----------------- Show All Expense ------------------
+app.get('/expenses/:user_id', (req, res) => {
+    const userId = req.params.user_id;
+    const sql = "SELECT * FROM expense WHERE user_id = ?";
+    db.query(sql, [userId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(results);
+    });
+});
 
-    // Write your code here
 
-// ----------------- Show Today's Expense ------------------
-
-    // Write your code here
+// ----------------- Show Today's Expense -------------
+app.get('/expenses/today/:user_id', (req, res) => {
+    const userId = req.params.user_id;
+    const sql = "SELECT * FROM expense WHERE DATE(date) = CURDATE() AND user_id = ?";
+    db.query(sql, [userId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(results);
+    });
+});
 
 // ----------------- Search Expense ------------------
+
 
 app.get('/expense/search/:user_id', (req,res) => {
     const userId = req.params.user_id;
@@ -67,8 +85,6 @@ app.get('/expense/search/:user_id', (req,res) => {
     AND item LIKE ?
     `;
 
-   
-
     db.query(sql, [userId,searchKeyword ], (err,result) =>{
         if(err) {
             console.error('Database error:',err);
@@ -78,17 +94,45 @@ app.get('/expense/search/:user_id', (req,res) => {
     });
 
 });
- 
 
 // ----------------- Add Expense ------------------
+app.post('/add-expenses', (req, res) => {
+    const { item, paid, user_id } = req.body;
+    if (!item || !paid || !user_id) {
+        return res.status(400).send("Missing fields!");
+    }
 
-    // Write your code here
+    const sql = "INSERT INTO expense (item, paid, user_id) VALUES (?, ?, ?)";
+    db.query(sql, [item, paid, user_id], (err, result) => {
+        if (err) {
+            return res.status(500).send("Database error!");
+        }
+        res.status(201).json({
+            message: "Expense added successfully!",
+            expense_id: result.insertId
+        });
+    });
+});
+
 
 // ----------------- Delete Expense ------------------
 
-    // Write your code here
+app.delete('/del-expenses/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = "DELETE FROM expense WHERE id = ?";
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            return res.status(500).send("Database error!");
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).send("Expense not found!");
+        }
+        res.json({ message: "Expense deleted successfully!" });
+    });
+});
 
 // ---------------------------------------------------
+
 
 app.listen(3000,()=>{
     console.log('Server is running on port 3000 ✅');
