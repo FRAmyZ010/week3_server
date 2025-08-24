@@ -46,10 +46,29 @@ app.post('/login',(req,res)=>{
 });
 
 // ----------------- Show All Expense ------------------
+app.get('/expenses/:user_id', (req, res) => {
+    const userId = req.params.user_id;
+    const sql = "SELECT * FROM expense WHERE user_id = ?";
+    db.query(sql, [userId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(results);
+    });
+});
 
 
-// ----------------- Show Today's Expense ------------------
-
+// ----------------- Show Today's Expense -------------
+app.get('/expenses/today/:user_id', (req, res) => {
+    const userId = req.params.user_id;
+    const sql = "SELECT * FROM expense WHERE DATE(date) = CURDATE() AND user_id = ?";
+    db.query(sql, [userId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(results);
+    });
+});
 
 // ----------------- Search Expense ------------------
 
