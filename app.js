@@ -58,7 +58,7 @@ app.get('/expenses/:user_id', (req, res) => {
 });
 
 
-// ----------------- Show Today's Expense ------------------
+// ----------------- Show Today's Expense -------------
 app.get('/expenses/today/:user_id', (req, res) => {
     const userId = req.params.user_id;
     const sql = "SELECT * FROM expense WHERE DATE(date) = CURDATE() AND user_id = ?";
@@ -72,17 +72,49 @@ app.get('/expenses/today/:user_id', (req, res) => {
 
 // ----------------- Search Expense ------------------
 
-    // Write your code here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ----------------- Add Expense ------------------
+app.post('/add-expenses', (req, res) => {
+    const { item, paid, user_id } = req.body;
+    if (!item || !paid || !user_id) {
+        return res.status(400).send("Missing fields!");
+    }
 
-    // Write your code here
+    const sql = "INSERT INTO expense (item, paid, user_id) VALUES (?, ?, ?)";
+    db.query(sql, [item, paid, user_id], (err, result) => {
+        if (err) {
+            return res.status(500).send("Database error!");
+        }
+        res.status(201).json({
+            message: "Expense added successfully!",
+            expense_id: result.insertId
+        });
+    });
+});
+
 
 // ----------------- Delete Expense ------------------
 
-    // Write your code here
-
-// ---------------------------------------------------
 
 app.listen(3000,()=>{
     console.log('Server is running on port 3000 ✅');
