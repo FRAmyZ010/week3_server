@@ -62,7 +62,7 @@ app.get('/expense/search/:user_id', (req,res) => {
     const sql = `
     SELECT * FROM expense
     WHERE user_id =?
-    AND Item LIKE ?
+    AND item LIKE ?
     `;
 
    
