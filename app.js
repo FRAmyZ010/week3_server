@@ -49,7 +49,7 @@ app.post('/login',(req,res)=>{
 app.get('/expenses/:user_id', (req, res) => {
     const userId = req.params.user_id;
     const sql = "SELECT * FROM expense WHERE user_id = ?";
-    connection.query(sql, [userId], (err, results) => {
+    db.query(sql, [userId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -62,7 +62,7 @@ app.get('/expenses/:user_id', (req, res) => {
 app.get('/expenses/today/:user_id', (req, res) => {
     const userId = req.params.user_id;
     const sql = "SELECT * FROM expense WHERE DATE(date) = CURDATE() AND user_id = ?";
-    connection.query(sql, [userId], (err, results) => {
+    db.query(sql, [userId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
