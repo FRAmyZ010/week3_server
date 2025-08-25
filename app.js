@@ -75,7 +75,7 @@ app.get('/expenses/today/:user_id', (req, res) => {
 
 app.get('/expense/search/:user_id', (req,res) => {
     const userId = req.params.user_id;
-    const keyword = (req.body.keyword ||"").trim();
+    const keyword = (req.query.keyword ||"").trim();
 
     const searchKeyword = `%${keyword}%` ;
 
