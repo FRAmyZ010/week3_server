@@ -102,7 +102,7 @@ app.post('/add-expenses', (req, res) => {
         return res.status(400).send("Missing fields!");
     }
 
-    const sql = "INSERT INTO expense (item, paid, user_id) VALUES (?, ?, ?)";
+    const sql = "INSERT INTO expense (item, paid, user_id,date) VALUES (?, ?, ?,CURDATE())";
     db.query(sql, [item, paid, user_id], (err, result) => {
         if (err) {
             return res.status(500).send("Database error!");
