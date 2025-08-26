@@ -127,7 +127,7 @@ app.delete('/del-expenses/:id', (req, res) => {
         if (result.affectedRows === 0) {
             return res.status(404).send("Expense not found!");
         }
-        res.json({ message: "Expense deleted successfully!" });
+        res.json({ message: "Deleted!" });
     });
 });
 
