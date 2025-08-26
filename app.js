@@ -108,7 +108,7 @@ app.post('/add-expenses', (req, res) => {
             return res.status(500).send("Database error!");
         }
         res.status(201).json({
-            message: "Expense added successfully!",
+            message: "Inserted!",
             expense_id: result.insertId
         });
     });
